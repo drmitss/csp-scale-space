@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "csp-scalespace: anisotropic spectral scale-space for multiscale ODEs via CSP"
+version: 0.1.0
+authors:
+  - family-names: Manias
+    given-names: Dimitris M.
+    affiliation: "Department of Mathematics, Khalifa University of Science and Technology"
+  - family-names: Najman
+    given-names: Laurent
+    affiliation: "Department of Mathematics, Khalifa University of Science and Technology"
+preferred-citation:
+  type: article
+  title: "Anisotropic Spectral Scale-Space Formulation for Multiscale Nonlinear Ordinary Differential Equations via Computational Singular Perturbation"
+  authors:
+    - family-names: Manias
+      given-names: Dimitris M.
+    - family-names: Najman
+      given-names: Laurent
+  year: 2026

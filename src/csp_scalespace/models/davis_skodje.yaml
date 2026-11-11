@@ -1,0 +1,38 @@
+# Davis-Skodje benchmark (paper Section 3.4, Eq. 21) - the running example of the theory.
+name: davis_skodje
+description: "2D Davis-Skodje system: one fast and one slow mode, exactly known curved SIM."
+
+equations:
+  y1: "-y1"
+  y2: "-(y2 - y1/(1 + y1))/eps - y1/(1 + y1)**2"
+
+parameters:
+  eps: 0.08          # stiffness: tau_1 = eps, tau_2 = 1
+
+initial_conditions:
+  y1: 1.5
+  y2: 0.2
+
+labels:
+  y1: "$y^1$"
+  y2: "$y^2$"
+
+# Exactly known slow invariant manifold (Eq. 22): fast variable as a function of the others.
+exact_sim:
+  y2: "y1/(1 + y1)"
+
+settings:
+  t_end: 4.0
+  n_points: 800
+  order: 1                      # first-order refined CSP basis
+  levels: [1]
+  phase_variables: [y1, y2]
+  extra_initial_conditions:     # additional trajectories in the phase portrait
+    - [2.05, 0.25]
+    - [1.85, 0.88]
+    - [1.05, 0.82]
+    - [0.75, 0.12]
+  # asymptotic-convergence study (paper Fig. 6b)
+  gap_parameter: eps
+  gap_values: {start: -3.5, stop: -0.8, num: 50, scale: log}
+  gap_reference_state: [1.0, 0.5]

@@ -1,0 +1,65 @@
+# ======================================================================
+#  csp-scalespace model file - TEMPLATE
+#  Copy this file, replace the equations with your own and run
+#      csp-scalespace run my_model.yaml -o my_figures
+#  Only `equations` and `initial_conditions` are mandatory.
+# ======================================================================
+name: my_model
+description: "One-line description that appears in the report."
+
+# --- constants used in the equations ---------------------------------
+parameters:
+  eps: 0.01
+
+# --- optional intermediate quantities (reaction rates, fluxes, ...) ---
+# May use variables, parameters and earlier definitions.
+definitions:
+  R: "(x/(1 + x) - y)/eps"
+
+# --- the ODE system  d(variable)/dt = expression ----------------------
+# Python syntax: ** for powers; exp, log, sqrt, sin, cos, tanh, Max, Min ...
+# The order of the entries is the order of the state vector.
+equations:
+  x: "-x"
+  y: "R - x/(1 + x)**2"
+
+# --- initial state -----------------------------------------------------
+initial_conditions:
+  x: 1.5
+  y: 0.2
+
+# --- optional: axis labels (matplotlib mathtext) -----------------------
+labels:
+  x: "$x$"
+  y: "$y$"
+
+# --- optional: exactly known slow manifold, fast variable = f(others) --
+# exact_sim:
+#   y: "x/(1 + x)"
+
+# --- optional: reduced models to overlay in the comparison figures ----
+# reference_models:
+#   QSSA:
+#     equations:
+#       x: "-x"
+#       y: "-x/(1 + x)**2"
+
+# --- analysis and plotting options (all optional except t_end) --------
+settings:
+  t_end: 4.0              # final time
+  n_points: 800           # number of output times
+  time_scale: linear      # linear | log  (log: also set t_start > 0)
+  # t_start: 1.0e-5
+  # time_unit: s
+  filter: gaussian        # gaussian | exponential (with p) | rational
+  order: 1                # CSP basis: 0 = Jacobian eigenvectors, 1 = one B- and A-refinement
+  # levels: [1]           # numbers M of exhausted modes to analyse (default: all spectral gaps)
+  # fixed_sigmas: [0.1]   # extra reduced models at constant scale
+  # snapshots: [0.0, 1.0] # times of the pointer-vs-scale figures
+  # sigma_range: [1.0e-4, 1.0e+2]
+  # phase_variables: [x, y]
+  # phase_log: false
+  # log_states: false
+  # extra_initial_conditions: [[2.0, 0.3], [1.0, 0.8]]
+  # gap_parameter: eps    # enables the asymptotic-convergence figure
+  # gap_values: {start: -3.5, stop: -1.0, num: 30, scale: log}

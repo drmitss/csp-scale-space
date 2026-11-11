@@ -1,0 +1,56 @@
+# Michaelis-Menten mechanism, PEA regime-shift benchmark (paper Section 6.1, Eqs. 89-95).
+name: michaelis_menten
+description: "Michaelis-Menten kinetics, Case 3: sQSSA -> PEA -> rQSSA regime shift at t ~ 10 s."
+
+definitions:
+  R1: "k1f*(e0 - c)*s - k1b*c"     # reversible binding   S + E <-> C
+  R2: "k2*c"                       # catalytic turnover   C -> E + P
+
+equations:
+  c: "R1 - R2"
+  s: "-R1"
+
+parameters:
+  k1f: 1000.0
+  k1b: 0.01
+  k2: 0.1
+  e0: 10.0
+
+initial_conditions:
+  c: 9.999999
+  s: 10.0
+
+labels:
+  c: "$c$"
+  s: "$s$"
+
+# Classical reduced model overlaid in the comparison figures (Eq. 94).
+reference_models:
+  PEA:
+    definitions:
+      nu: "(e0 - c)/(k1b/k1f + Max(s, 0))"
+    equations:
+      c: "-nu/(1 + nu)*k2*c"
+      s: "-1/(1 + nu)*k2*c"
+
+settings:
+  t_end: 20.3
+  n_points: 2000
+  time_unit: s
+  order: 0
+  levels: [1]
+  snapshots: [2.0, 10.0, 15.0]
+  fixed_sigmas: [0.25, 0.1]
+  tau_relax_max: 0.1
+  fiber_filter: rational
+  log_states: true
+  state_floor: 1.0e-8
+  sigma_range: [1.0e-6, 3.0e+7]
+  phase_variables: [c, s]
+  phase_log: true
+  extra_initial_conditions:
+    - [18.5, 0.35]
+    - [15.0, 0.015]
+    - [3.0, 1.15]
+    - [6.5, 0.5]
+  extra_t_end: 0.05
