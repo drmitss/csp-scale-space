@@ -26,7 +26,7 @@ import numpy as np
 from scipy.integrate import solve_ivp
 
 from .csp import CSPBasis, csp_basis
-from .filters import ScaleFilter, as_filter
+from .filters import as_filter
 
 __all__ = [
     "cutoff_scale", "active_dimension", "scale_space_operator", "diffusion_tensor", "pointers",

@@ -1,7 +1,7 @@
 # Installation
 
 ```bash
-git clone https://github.com/<user>/csp-scale-space.git
+git clone https://github.com/drmitss/csp-scale-space.git
 cd csp-scale-space
 pip install -e .
 ```
@@ -17,5 +17,5 @@ Check the installation:
 
 ```bash
 csp-scalespace models        # lists the three built-in models
-pytest                       # 19 tests, about 20 s
+pytest                       # about 20 s
 ```
