@@ -13,11 +13,16 @@ Reference implementation of
 > D. M. Manias and L. Najman, *Anisotropic Spectral Scale-Space Formulation for Multiscale Nonlinear
 > Ordinary Differential Equations via Computational Singular Perturbation*.
 
-Classical CSP reduces a stiff system by choosing an integer number `M` of exhausted (fast) modes and
+Classical CSP reduces a stiff system by choosing an integer number $`M`$ of exhausted (fast) modes and
 projecting them out - a binary switch. This package replaces the switch with a continuous dial: an
-observation scale `σ`. Each CSP mode is attenuated by a smooth weight `w_i = exp[-(σ/τ_i)²]` that
-depends on the ratio of `σ` to the mode's timescale `τ_i`, so one global model moves continuously
-from the full dynamics (`σ → 0`) through every slow invariant manifold (SIM) of the system.
+observation scale $`\sigma`$. Each CSP mode is attenuated by a smooth weight
+
+```math
+w_i(\mathbf y;\sigma)=\exp\!\left[-\left(\frac{\sigma}{\tau_i(\mathbf y)}\right)^{2}\right]
+```
+
+that depends on the ratio of $`\sigma`$ to the mode's timescale $`\tau_i`$, so one global model moves
+continuously from the full dynamics ($`\sigma\to0`$) through every slow invariant manifold (SIM) of the system.
 
 You give the package **a model** (equations, parameters, initial conditions) and it gives you
 
@@ -25,15 +30,15 @@ You give the package **a model** (equations, parameters, initial conditions) and
   (shown in the paper for the Davis-Skodje system) and the application figures (shown for the
   Michaelis-Menten mechanism and a three-scale network);
 * a **report** with timescales, cutoff scales, CSP pointers and reduced-model errors;
-* a small, documented **library** of the operators themselves (`S_σ`, pointers, Formulation A,
+* a small, documented **library** of the operators themselves ($`\mathcal S_\sigma`$, pointers, Formulation A,
   Formulation B, the two-stage reduced model, first-order CSP refinements).
 
 It also reproduces **every figure of the paper** exactly (`paper/`).
 
-| | | |
+| Fig. 6a of the paper | Fig. 12c of the paper | Fig. 10a of the paper |
 |---|---|---|
-| ![](docs/_static/gallery/davis_skodje/07_two_stage.png) | ![](docs/_static/gallery/three_scale/12_realtime_pointers.png) | ![](docs/_static/gallery/michaelis_menten/14_model_comparison_adaptive.png) |
-| Two-stage operator: fibre relaxation, then tangent flow | Sequential mode exhaustion, `σ = t` | Scale-space reduced model across a regime shift |
+| ![](docs/_static/paper/fig1a_phase_space.png) | ![](docs/_static/paper/fig_3d_dynamic_pointers.png) | ![](docs/_static/paper/fig_mm_comparison_sqssa_adaptive.png) |
+| Two-stage operator: fibre relaxation, then tangent flow (Davis-Skodje) | Sequential mode exhaustion with $`\sigma=t`$ (three-scale network) | Scale-space reduced model across a regime shift (Michaelis-Menten) |
 
 ---
 
@@ -93,7 +98,7 @@ you never write them by hand.
 
 ## Describing your model
 
-A model is an autonomous system `dy/dt = g(y)`, `y(0) = y0`. There are three equivalent ways to
+A model is an autonomous system $`\dot{\mathbf y}=\mathbf g(\mathbf y)`$, $`\mathbf y(0)=\mathbf y_0`$. There are three equivalent ways to
 provide it.
 
 ### 1. A model file (YAML or JSON)
@@ -159,10 +164,10 @@ manuscript, where the same content is shown for the benchmark models.
 |---|---|---|
 | `01_time_evolution` | Fig. 1a, 7a | state variables in time, fast initial layer shaded |
 | `02_phase_portrait` | Fig. 1b, 7b | trajectories collapsing onto the slow invariant manifold, fast-fibre directions |
-| `03_filter_weights` | Fig. 2 | survival weights `w_i(σ)` of all modes, timescales `τ_i`, cutoff scales `σ_c`, SIM windows |
+| `03_filter_weights` | Fig. 2 | survival weights $`w_i(\sigma)`$ of all modes, timescales $`\tau_i`$, cutoff scales $`\sigma_c`$, SIM windows |
 | `04_isotropic_vs_anisotropic` | Fig. 3 | naive Gaussian smoothing drifts off the SIM; anisotropic CSP filtering returns perturbed states to it |
 | `05_geometric_duality` | Fig. 4 | Formulation A (filter the velocity) vs. Formulation B (relax the state) at the initial state |
-| `06_refinement_geometry` | Fig. 5 | basis vectors before/after the B- and A-refinements; tangency error of both bases |
+| `06_refinement_geometry` | Fig. 5 | basis vectors before/after the $`\mathbf B`$- and $`\mathbf A`$-refinements; tangency error of both bases |
 | `07_two_stage` | Fig. 6a, 13 | Stage 1 fibre relaxation + Stage 2 tangent flow in phase space (2-D or 3-D) |
 | `08_refinement_convergence` | Fig. 6b | error orders vs. the spectral gap (needs `gap_parameter`) |
 
@@ -170,40 +175,112 @@ manuscript, where the same content is shown for the benchmark models.
 
 | file | paper | content |
 |---|---|---|
-| `09_timescales` | Fig. 8a, 12b | `τ_i(y(t))` and adaptive cutoff scales `σ_c,M(t) = sqrt(τ_M τ_{M+1})` |
-| `10_pointers_vs_scale_t*` | Fig. 9a-c, 11a | fast/slow CSP pointers of each variable against `σ` at the snapshot times |
+| `09_timescales` | Fig. 8a, 12b | $`\tau_i(\mathbf y(t))`$ and adaptive cutoff scales $`\sigma_{c,M}(t)=\sqrt{\tau_M\,\tau_{M+1}}`$ |
+| `10_pointers_vs_scale_t*` | Fig. 9a-c, 11a | fast/slow CSP pointers of each variable against $`\sigma`$ at the snapshot times |
 | `11_pointers_trajectory` | Fig. 8b, 9d | pointers at the adaptive scale along the trajectory: which variable is slaved, and when |
-| `12_realtime_pointers` | Fig. 12c | pointers with `σ = t`: staircase `M(t) = 0 → 1 → 2 → ...` |
+| `12_realtime_pointers` | Fig. 12c | pointers with $`\sigma=t`$: staircase $`M(t)=0\to1\to2\to\dots`$ |
 | `13_fiber_relaxation` | Fig. 11b | initial state relaxed across all scales: one plateau per manifold |
-| `14_model_comparison_*` | Fig. 10, 12a | scale-space reduced models (every level `M`, adaptive or fixed `σ`) vs. full and reference models |
+| `14_model_comparison_*` | Fig. 10, 12a | scale-space reduced models (every level $`M`$, adaptive or fixed $`\sigma`$) vs. full and reference models |
 
-Examples for the three built-in models are in
-[`docs/_static/gallery/`](docs/_static/gallery). A few of them:
+The corresponding figures of the paper, for its three benchmark models:
 
 | Davis-Skodje | Michaelis-Menten | Three-scale network |
 |---|---|---|
-| ![](docs/_static/gallery/davis_skodje/05_geometric_duality.png) | ![](docs/_static/gallery/michaelis_menten/11_pointers_trajectory.png) | ![](docs/_static/gallery/three_scale/13_fiber_relaxation.png) |
-| ![](docs/_static/gallery/davis_skodje/08_refinement_convergence.png) | ![](docs/_static/gallery/michaelis_menten/09_timescales.png) | ![](docs/_static/gallery/three_scale/14_model_comparison_adaptive.png) |
+| ![](docs/_static/paper/fig_geom2_filter_weights.png) | ![](docs/_static/paper/fig_mm_adaptive_timescales.png) | ![](docs/_static/paper/fig2b_3d_fiber_relaxation.png) |
+| Fig. 2 (`03_filter_weights`) | Fig. 8a (`09_timescales`) | Fig. 11b (`13_fiber_relaxation`) |
+| ![](docs/_static/paper/fig1b_asymptotic_convergence.png) | ![](docs/_static/paper/fig_mm_pointers_trajectory.png) | ![](docs/_static/paper/fig_3d_time_comparison.png) |
+| Fig. 6b (`08_refinement_convergence`) | Fig. 8b (`11_pointers_trajectory`) | Fig. 12a (`14_model_comparison`) |
+
+The versions produced by the generic pipeline for the same three models are in
+[`docs/_static/gallery/`](docs/_static/gallery).
 
 ## The method in one page
 
-| step | formula | paper | function |
-|---|---|---|---|
-| CSP basis: right/left eigenvectors of the Jacobian, fastest mode first | `J a_i = λ_i a_i`, `b^i J = λ_i b^i`, `τ_i = 1/|λ_i|` | Eqs. 19, 26 | `csp_basis(model, y)` |
-| modal amplitudes | `f^i = b^i · g` | Eq. 12 | `basis.amplitudes(g)` |
-| survival weight of mode `i` at scale `σ` | `w_i = exp[-(σ/τ_i)^p]` (or rational, or sharp) | Eqs. 36-37 | `ScaleFilter.weights` |
-| scale-space operator | `S_σ = A W B` | Eq. 43 | `scale_space_operator` |
-| **Formulation A** - filter the velocity, state fixed | `g_σ = S_σ g` | Eq. 42 | `filtered_field` |
-| **Formulation B** - relax the state along fast fibres | `∂y_σ/∂σ = -Σ a_i (d_i/λ_i) f^i` | Eq. 49 | `fiber_relaxation` |
-| cutoff scale in the centre of a spectral gap | `σ_c = sqrt(τ_M τ_{M+1})` | Thm 4.2 | `cutoff_scale` |
-| scale-dependent pointers | `D^k = Σ_i (1-w_i) a_i^k b^i_k`, `S^k = 1 - D^k` | Eqs. 56-57 | `pointers` |
-| first-order refinement (curvature) | `B_f ← B_f + P0 B_s`, `A_f ← A_f - A_s Q0`, ... | Eqs. 66-73 | `refine_basis`, `csp_basis(..., order=1, M=M)` |
-| two-stage reduced model | Stage 1: `y → y_σ`; Stage 2: `ẏ = S_σ(y) g(y)` | Eq. 50 | `two_stage_rhs`, `study.reduced(M)` |
+Notation: $`N`$ variables, modes ordered from fastest to slowest,
+$`\tau_1<\tau_2<\dots<\tau_N`$; $`M`$ is the number of exhausted (fast) modes.
 
-With the sharp filter `S_σ` is exactly the classical CSP slow projector with `M(σ)` exhausted modes
-(Eq. 45); with a smooth filter and `σ = σ_c` it agrees with it up to `O(ε)`, `ε = τ_M/τ_{M+1}`
-(Theorem 4.2), and with the first-order basis the filtered field is tangent to the SIM up to
-`O(ε²)` (Theorem 5.3). Both statements are checked in the test-suite.
+**CSP basis** (Eqs. 19, 26) - `csp_basis(model, y)`. Right and left eigenvectors of the Jacobian
+$`\mathbf J=\partial\mathbf g/\partial\mathbf y`$:
+
+```math
+\mathbf J\,\mathbf a_i=\lambda_i\,\mathbf a_i,\qquad
+\mathbf b^i\,\mathbf J=\lambda_i\,\mathbf b^i,\qquad
+\mathbf b^i\cdot\mathbf a_j=\delta^i_j,\qquad
+\tau_i=\frac{1}{\lvert\lambda_i\rvert}
+```
+
+**Modal amplitudes** (Eq. 12) - `basis.amplitudes(g)`:
+
+```math
+\mathbf g(\mathbf y)=\sum_{i=1}^{N}\mathbf a_i\,f^i,\qquad f^i=\mathbf b^i\cdot\mathbf g
+```
+
+**Survival weights** (Eqs. 36-37) - `ScaleFilter.weights`. Exponential family (Gaussian for
+$`p=2`$), rational filter, and the sharp limit $`p\to\infty`$:
+
+```math
+w_i=\exp\!\left[-\left(\frac{\sigma}{\tau_i}\right)^{p}\right],\qquad
+w_i=\frac{1}{1+(\sigma/\tau_i)^2},\qquad
+w_i=\Theta(\tau_i-\sigma)
+```
+
+**Scale-space operator and Formulation A** (Eqs. 42-43) - `scale_space_operator`,
+`filtered_field`. The velocity is filtered, the state is held fixed:
+
+```math
+\mathcal S_\sigma=\mathbf A\,\mathbf W\,\mathbf B=\sum_{i=1}^{N}w_i\,\mathbf a_i\,\mathbf b^i,\qquad
+\mathbf g_\sigma=\mathcal S_\sigma\,\mathbf g
+```
+
+**Formulation B** (Eq. 49) - `fiber_relaxation`. The state is relaxed along the fast fibres, with
+$`d_i=-\partial_\sigma\ln w_i`$:
+
+```math
+\frac{\partial\mathbf y_\sigma}{\partial\sigma}
+=-\sum_{i=1}^{N}\mathbf a_i(\mathbf y_\sigma)\,
+\frac{d_i(\mathbf y_\sigma;\sigma)}{\lambda_i(\mathbf y_\sigma)}\,f^i(\mathbf y_\sigma),
+\qquad \mathbf y_{\sigma=0}=\mathbf y
+```
+
+**Cutoff scale** (Theorem 4.2) - `cutoff_scale`. The centre of the spectral gap between modes
+$`M`$ and $`M+1`$:
+
+```math
+\sigma_{c,M}=\sqrt{\tau_M\,\tau_{M+1}}
+```
+
+**Scale-dependent pointers** (Eqs. 56-57) - `pointers`. Fast pointer $`D^k`$ and slow pointer
+$`S^k`$ of variable $`k`$:
+
+```math
+S^k(\mathbf y;\sigma)=\sum_{i=1}^{N}w_i\,a_i^k\,b^i_k,\qquad
+D^k=1-S^k,\qquad \sum_{k=1}^{N}D^k\approx M(\sigma)
+```
+
+**First-order refinement** (Eqs. 66-73) - `refine_basis`, `csp_basis(..., order=1, M=M)`. One
+$`\mathbf B`$- and one $`\mathbf A`$-refinement account for the curvature of the manifold
+(subscripts $`f`$, $`s`$: fast and slow blocks):
+
+```math
+\mathbf B_f^{(1)}=\mathbf B_f+\mathbf P_0\,\mathbf B_s,\qquad
+\mathbf A_s^{(1)}=\mathbf A_s-\mathbf A_f\,\mathbf P_0,\qquad
+\mathbf A_f^{(1)}=\mathbf A_f-\mathbf A_s^{(1)}\,\mathbf Q_0,\qquad
+\mathbf B_s^{(1)}=\mathbf B_s+\mathbf Q_0\,\mathbf B_f^{(1)}
+```
+
+**Two-stage reduced model** (Eq. 50) - `two_stage_rhs`, `study.reduced(M)`. Stage 1 relaxes the
+state onto the manifold, Stage 2 integrates the filtered field from there:
+
+```math
+\mathbf y\ \longmapsto\ \mathbf y_\sigma,\qquad
+\dot{\mathbf y}_\sigma=\mathcal S_\sigma(\mathbf y_\sigma)\,\mathbf g(\mathbf y_\sigma)
+```
+
+With the sharp filter $`\mathcal S_\sigma`$ is exactly the classical CSP slow projector with
+$`M(\sigma)`$ exhausted modes (Eq. 45). With a smooth filter and $`\sigma=\sigma_c`$ it agrees with
+it up to $`O(\epsilon)`$, where $`\epsilon=\tau_M/\tau_{M+1}`$ (Theorem 4.2), and with the
+first-order basis the filtered field is tangent to the SIM up to $`O(\epsilon^2)`$ (Theorem 5.3).
+Both statements are checked in the test-suite.
 
 ## Using the library directly
 
@@ -236,9 +313,9 @@ routed through this library. `PAPER_FIGURES` in `reproduce_paper_figures.py` map
 panel to its function and file name. Figures 3, 4 and 5 of the paper are *schematic illustrations*;
 their computed counterparts are figures `04`-`06` of the catalogue above.
 
-| Fig. 6a | Fig. 9b | Fig. 13 |
+| Fig. 1b | Fig. 9b | Fig. 13 |
 |---|---|---|
-| ![](docs/_static/paper/fig1a_phase_space.png) | ![](docs/_static/paper/fig_mm_pointers_t10.png) | ![](docs/_static/paper/fig_3d_sim_trajectories.png) |
+| ![](docs/_static/paper/fig_ds_intro_phase.png) | ![](docs/_static/paper/fig_mm_pointers_t10.png) | ![](docs/_static/paper/fig_3d_sim_trajectories.png) |
 
 ## Settings reference
 
@@ -251,10 +328,10 @@ All settings can be given in the `settings:` block of a model file or as keyword
 | `time_scale`, `t_start` | `linear`, 0 | `log` for dynamics spanning decades (then `t_start > 0` is the first output time) |
 | `time_unit` | `""` | unit shown on axes |
 | `filter`, `p` | `gaussian`, 2 | scale filter: `gaussian`, `exponential` (exponent `p`), `rational` |
-| `fiber_filter` | same as `filter` | filter used for Formulation B (`rational` is the most robust over many decades of `σ`) |
+| `fiber_filter` | same as `filter` | filter used for Formulation B (`rational` is the most robust over many decades of $`\sigma`$) |
 | `order` | 1 | CSP basis: 0 = Jacobian eigenvectors, 1 = one B- and one A-refinement |
-| `levels` | all gaps | numbers `M` of exhausted modes to analyse |
-| `fixed_sigmas` | `[]` | additional reduced models at constant `σ` |
+| `levels` | all gaps | numbers $`M`$ of exhausted modes to analyse |
+| `fixed_sigmas` | `[]` | additional reduced models at constant $`\sigma`$ |
 | `stabilize`, `tau_relax_max` | `true`, none | keep the reduced model on the manifold (continuous Stage 1 term) |
 | `snapshots` | `[0]` | times of the pointer-vs-scale figures |
 | `sigma_range` | automatic | range of the scale axis |
@@ -271,17 +348,18 @@ The implementation follows the assumptions of the paper (Section 3.3) and report
 
 * **Real spectrum.** Complex-conjugate eigenvalues are outside the theory (Section 8.5); a
   `ComplexSpectrumWarning` is issued and results at such states should not be trusted.
-* **Ordered, non-crossing timescales.** Modes are sorted by `|λ_i|` at every state. Where two
-  eigenvalues cross, the refinement (which divides by `λ_m - λ_n`) is ill-conditioned.
-* **Dissipative fast modes.** Formulation B relaxes only modes with `λ_i < 0`; conserved
-  (`λ = 0`) and growing modes are left untouched.
+* **Ordered, non-crossing timescales.** Modes are sorted by $`\lvert\lambda_i\rvert`$ at every state.
+  Where two eigenvalues cross, the refinement (which divides by $`\lambda_m-\lambda_n`$) is
+  ill-conditioned.
+* **Dissipative fast modes.** Formulation B relaxes only modes with $`\lambda_i<0`$; conserved
+  ($`\lambda=0`$) and growing modes are left untouched.
 * **Stage 2 stabilisation.** For long integrations the reduced model contains, by default, a
-  continuous Stage-1 term that returns the state to the manifold on the time scale `σ`
+  continuous Stage-1 term that returns the state to the manifold on the time scale $`\sigma`$
   (`stabilize`); this is the form used for the Michaelis-Menten and three-scale results of the paper.
   Set `stabilize: false` for the pure tangent flow of Eq. (50).
-* **Refined timescales.** The first-order basis keeps the eigenvalue timescales `τ_i`; the
-  refined diagonal entries `Λ^{i,(1)}_i` differ from them at higher order only.
-* Dense linear algebra (one eigen-decomposition per evaluation): intended for small and medium `N`.
+* **Refined timescales.** The first-order basis keeps the eigenvalue timescales $`\tau_i`$; the
+  refined diagonal entries $`\Lambda^{i,(1)}_i`$ differ from them at higher order only.
+* Dense linear algebra (one eigen-decomposition per evaluation): intended for small and medium $`N`$.
 
 ## Repository layout
 
