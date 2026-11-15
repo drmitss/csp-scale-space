@@ -1,12 +1,11 @@
 # csp-scalespace
 
 [![tests](https://github.com/drmitss/csp-scale-space/actions/workflows/tests.yml/badge.svg)](https://github.com/drmitss/csp-scale-space/actions/workflows/tests.yml)
-[![docs](https://readthedocs.org/projects/csp-scale-space/badge/?version=latest)](https://csp-scale-space.readthedocs.io/en/latest/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Anisotropic spectral scale-space for multiscale nonlinear ODEs via Computational Singular Perturbation (CSP).**
 
-📖 **Manual:** <https://csp-scale-space.readthedocs.io>
+📖 **Manual:** sources in [`docs/`](docs), published with Read the Docs.
 
 Reference implementation of
 
@@ -390,10 +389,9 @@ pip install -e ".[test]" && pytest
 
 ## Documentation
 
-The manual is hosted at <https://csp-scale-space.readthedocs.io> (tutorials for the three benchmark
-models, a walkthrough for your own model, figure catalogue, settings, theory-to-code map, API).
-Its sources are in [`docs/`](docs) (Sphinx + MyST Markdown); Read the Docs builds them on every push
-using `.readthedocs.yaml`. To preview locally:
+The manual (tutorials for the three benchmark models, a walkthrough for your own model, figure
+catalogue, settings, theory-to-code map, API) is written in [`docs/`](docs) with Sphinx and MyST
+Markdown. Read the Docs builds it on every push using `.readthedocs.yaml`. To preview locally:
 
 ```bash
 pip install -e ".[docs]" && sphinx-build -b html docs docs/_build/html
