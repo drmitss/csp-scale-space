@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite the paper below."
+message: "If you use this software, please cite the paper below. "
 title: "csp-scalespace: anisotropic spectral scale-space for multiscale ODEs via CSP"
 version: 0.1.0
 repository-code: "https://github.com/drmitss/csp-scale-space"

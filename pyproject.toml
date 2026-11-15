@@ -19,7 +19,7 @@ test = ["pytest"]
 docs = ["sphinx>=7", "myst-parser", "furo", "sphinx-copybutton"]
 
 [project.urls]
-Homepage = "https://github.com/drmitss/csp-scale-space"
+Homepage = "https://github.com/drmitss/csp-scale-space" 
 Documentation = "https://github.com/drmitss/csp-scale-space/tree/main/docs"
 Issues = "https://github.com/drmitss/csp-scale-space/issues"
 

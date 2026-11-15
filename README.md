@@ -5,7 +5,7 @@
 
 **Anisotropic spectral scale-space for multiscale nonlinear ODEs via Computational Singular Perturbation (CSP).**
 
-📖 **Manual:** sources in [`docs/`](docs), published with Read the Docs.
+📖 **Manual:** sources in [`docs/`](docs), published with Read the Docs. 
 
 Reference implementation of
 
