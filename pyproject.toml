@@ -7,7 +7,7 @@ name = "csp-scalespace"
 version = "0.1.0"
 description = "Anisotropic spectral scale-space formulation for multiscale nonlinear ODEs via Computational Singular Perturbation"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Dimitris M. Manias" }, { name = "Laurent Najman" }]
 keywords = ["computational singular perturbation", "scale-space", "multiscale", "model reduction", "slow invariant manifold"]

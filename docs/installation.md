@@ -11,7 +11,7 @@ pip install -e .
 | tests | `pip install -e ".[test]"` | pytest |
 | documentation | `pip install -e ".[docs]"` | Sphinx, MyST, Furo |
 
-Dependencies: Python ≥ 3.9, NumPy, SciPy, Matplotlib, SymPy, PyYAML.
+Dependencies: Python ≥ 3.10, NumPy, SciPy, Matplotlib, SymPy, PyYAML.
 
 Check the installation:
 

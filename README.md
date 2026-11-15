@@ -65,7 +65,7 @@ cd csp-scale-space
 pip install -e .            # add ".[test]" for pytest, ".[docs]" for the documentation
 ```
 
-Requires Python ≥ 3.9 with NumPy, SciPy, Matplotlib, SymPy and PyYAML (installed automatically).
+Requires Python ≥ 3.10 with NumPy, SciPy, Matplotlib, SymPy and PyYAML (installed automatically).
 
 ## Quick start
 
